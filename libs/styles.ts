@@ -70,14 +70,14 @@ export default StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         marginTop: 45,
-        paddingHorizontal: 25,
+        paddingHorizontal: 10,
     },
     contentExra: {
         flexDirection: 'row',
         alignItems: 'center',
     },
     icoExtra: {
-        marginRight: 8,
+        marginRight: 5,
     },
     textExtra: {
         color: colors.white,
@@ -85,7 +85,7 @@ export default StyleSheet.create({
     },
     wrapConfig: {
         width: '100%',
-        marginTop: 25,
+        marginTop: 15,
     },
     contentConfig: {
         width: '100%',

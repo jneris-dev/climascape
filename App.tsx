@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppLoading from 'expo-app-loading';
 import { Feather } from '@expo/vector-icons';
@@ -23,31 +23,37 @@ export default function App() {
 
 	const [currentTemperature, setCurrentTemperature] = useState<number>()
 	const [location, setLocation] = useState('')
-	const [currentHour, SetCurrentHour] = useState('')
+	const [hours, setHours] = useState('')
+
+	const [locationCoords, setLocationCoords] = useState<object>()
+	const [errorMsg, setErrorMsg] = useState('')
 
 	const [wind, setWind] = useState('')
 	const [tempMin, setTempMin] = useState<number>()
 	const [tempMax, setTempMax] = useState<number>()
 	const [humidity, setHumidity] = useState('')
 	const [pressure, setPressure] = useState('')
-	const [weatherMain, setweatherMain] = useState('')
 	const [weatherMainDescription, setweatherMainDescription] = useState('')
 	const [weatherIcon, setweatherIcon] = useState('')
-
-	const [locationCoords, setLocationCoords] = useState({})
-	const [errorMsg, setErrorMsg] = useState('')
 
 	async function getLocation() {
 		let { status } = await Location.requestForegroundPermissionsAsync();
 		if (status !== 'granted') {
 			setErrorMsg('Permission to access location was denied');
+		} else {
+			let location = await Location.getCurrentPositionAsync({})
+			await setLocationCoords(location.coords)
 		}
-		let location = await Location.getCurrentPositionAsync({});
-		setLocationCoords(location.coords)
 	}
 
 	async function setCurrentWeather() {
 		await getLocation()
+
+		console.log(locationCoords)
+
+		let date = new Date()
+		setHours(date.getHours() + ':' + ('0' + date.getMinutes()).slice(-2))
+
 		const data = await getCurrentWeather(locationCoords)
 
 		setCurrentTemperature(convertKelvinToC(data[0]))
@@ -57,14 +63,13 @@ export default function App() {
 		setWind(data[4])
 		setHumidity(data[5])
 		setPressure(data[6])
-		setweatherMain(data[7])
-		setweatherMainDescription(data[8])
-		setweatherIcon(data[9])
+		setweatherMainDescription(data[7])
+		setweatherIcon(data[8])
 	}
 
 	function convertKelvinToC(kelvin: string) {
-		const K = parseInt(kelvin - 273)
-		return K
+		let K = parseInt(kelvin, 10)
+		return K - 273
 	}
 
 	useEffect(() => {
@@ -81,7 +86,7 @@ export default function App() {
 					<Feather name="crosshair" size={14} color={colors.blue} />
 					<Text style={styles.textLocalization}>Your Localization Now</Text>
 				</View>
-				<Text style={styles.localization}>{location}</Text>
+				<Text style={styles.localization}>{location} - {hours}</Text>
 				<Image
 					source={{
 						uri: `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`
@@ -120,8 +125,12 @@ export default function App() {
 						<Text style={styles.optionActiveConfig}>Celcius</Text>
 					</View>
 					<View style={styles.contentConfig}>
-						<Text style={styles.textExtra}>Velocidade do Vento</Text>
-						<Text style={styles.optionActiveConfig}>m/hs</Text>
+						<Text style={styles.textExtra}>Neve</Text>
+						<Text style={styles.optionActiveConfig}>--</Text>
+					</View>
+					<View style={styles.contentConfig}>
+						<Text style={styles.textExtra}>Raios</Text>
+						<Text style={styles.optionActiveConfig}>--</Text>
 					</View>
 				</View>
 			</View>
