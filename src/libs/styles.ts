@@ -14,28 +14,60 @@ export default StyleSheet.create({
         paddingTop: 30,
         paddingHorizontal: 30,
     },
-    yourLocalization: {
+    searchWrap: {
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 30,
+    },
+    searchInput: {
+        paddingLeft: 25,
+        paddingRight: 15,
+        height: 44,
+        borderRadius: 22,
+        backgroundColor: colors.background_dark,
+        color: colors.white,
+        width: '100%'
+    },
+    searchButton: {
+        width: 60,
+        backgroundColor: colors.purple,
+        height: 34,
+        position: 'absolute',
+        right: 10,
+        top: 5,
+        borderRadius: 25,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    searchCross: {
+        width: 'auto',
+        paddingLeft: 15
+    },
+    header: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
         marginBottom: 13,
+    },
+    subTitle: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 5,
     },
     textLocalization: {
         color: colors.blue,
-        fontSize: 14,
+        fontSize: 12,
         marginLeft: 5,
         fontFamily: fonts.text,
     },
     localization: {
         color: colors.white,
-        fontSize: 18,
+        fontSize: 15,
         fontFamily: fonts.text,
-    },
-    tempIcon: {
-        marginTop: 10,
-        width: 130,
-        height: 130,
     },
     badge: {
         backgroundColor: colors.purple,
@@ -83,41 +115,8 @@ export default StyleSheet.create({
         color: colors.white,
         fontFamily: fonts.text,
     },
-    wrapConfig: {
+    alertWrap: {
         width: '100%',
         marginTop: 15,
     },
-    contentConfig: {
-        width: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginTop: 25,
-    },
-    optionActiveConfig: {
-        color: colors.blue,
-        fontFamily: fonts.text,
-    },
-    bottomTab: {
-        width: '100%',
-        height: 60,
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        flexDirection: 'row',
-        paddingHorizontal: 25,
-        backgroundColor: colors.background,
-    },
-    contentBottomTab: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 10,
-    },
-    buttonBottomTab: {
-        backgroundColor: colors.pink,
-        width: 100,
-        height: 35,
-        borderRadius: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
 });
