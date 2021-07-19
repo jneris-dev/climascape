@@ -1,5 +1,5 @@
 const key = '0aeb4a4cb0780b3ca18871522e5120fc'
-const lang = 'pt_br'
+const lang = 'en'
 
 export async function getCurrentWeather(resolvedLocation: any) {
     const axios = require('axios')

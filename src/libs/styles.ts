@@ -16,8 +16,6 @@ export default StyleSheet.create({
         position: 'absolute',
         left: 0,
         top: 0,
-        opacity: 0.7,
-        backgroundColor: '#000',
         height: '100%',
         width: '100%',
     },
@@ -41,7 +39,7 @@ export default StyleSheet.create({
         height: 44,
         borderRadius: 22,
         borderWidth: 1,
-        borderColor: '#777',
+        borderColor: '#999',
         color: colors.white,
         width: '100%'
     },
@@ -74,14 +72,14 @@ export default StyleSheet.create({
         marginBottom: 5,
     },
     textLocalization: {
-        color: colors.blue,
+        color: colors.white,
         fontSize: 12,
         marginLeft: 5,
         fontFamily: fonts.text,
     },
     localization: {
         color: colors.white,
-        fontSize: 15,
+        fontSize: 18,
         fontFamily: fonts.text,
     },
     badge: {
@@ -129,9 +127,5 @@ export default StyleSheet.create({
     textExtra: {
         color: colors.white,
         fontFamily: fonts.text,
-    },
-    alertWrap: {
-        width: '100%',
-        marginTop: 15,
     },
 });
