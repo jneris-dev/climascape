@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, Alert } from 'react-native';
+import { Button, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, Alert, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 
-import { getCurrentWeather, getCurrentCity } from '../libs/api';
+import { getCurrentWeather, getCurrentCity, getBackground } from '../libs/api';
 import { Load } from '../components/Load';
 import { WeatherIcon } from '../components/WeatherIcon';
 
@@ -21,8 +21,9 @@ const callback: location = {
     longitude: '-46.6388'
 }
 
-
 export function Home() {
+
+    const [text, setText] = useState(null)
 
     const [currentTemperature, setCurrentTemperature] = useState<number>()
     const [location, setLocation] = useState('')
@@ -37,9 +38,10 @@ export function Home() {
     const [humidity, setHumidity] = useState('')
     const [pressure, setPressure] = useState('')
     const [weatherMainDescription, setweatherMainDescription] = useState('')
-    const [weatherIcon, setweatherIcon] = useState('')
+    const [weatherIcon, setWeatherIcon] = useState('')
 
     const [currentCity, setCurrentCity] = useState('')
+    const [weatherBg, setWeatherBg] = useState('')
 
     async function getLocation() {
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -53,12 +55,14 @@ export function Home() {
     }
 
     async function setCurrentWeather() {
-        const location = await getLocation()
-
-        const resolvedLocation: location = location || callback
+        setLoading(true)
 
         let date = new Date()
         setHours(date.getHours() + ':' + ('0' + date.getMinutes()).slice(-2))
+
+        const location = await getLocation()
+
+        const resolvedLocation: location = location || callback
 
         const data = await getCurrentWeather(resolvedLocation)
 
@@ -70,12 +74,19 @@ export function Home() {
         setHumidity(data[5])
         setPressure(data[6])
         setweatherMainDescription(data[7])
-        setweatherIcon(data[8])
+        setWeatherIcon(data[8])
+
+        const info = data ? data[7] : 'clouds'
+
+        const bg = await getBackground(info)
+
+        setWeatherBg(bg[0])
 
         setLoading(false)
     }
 
     async function setCurrentCityFunc() {
+        setLoading(true)
 
         const city = currentCity ? currentCity : location
 
@@ -89,7 +100,13 @@ export function Home() {
         setHumidity(data[5])
         setPressure(data[6])
         setweatherMainDescription(data[7])
-        setweatherIcon(data[8])
+        setWeatherIcon(data[8])
+
+        const info = data[7]
+
+        const bg = await getBackground(info)
+
+        setWeatherBg(bg[0])
 
         setLoading(false)
     }
@@ -109,73 +126,85 @@ export function Home() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View style={styles.content}>
-                    <View style={styles.searchWrap}>
-                        <View style={{ position: 'relative', width: '100%', flex: 1 }}>
-                            <TextInput
-                                style={styles.searchInput}
-                                placeholder={'Search'}
-                                onChangeText={setCurrentCity}
-                                placeholderTextColor="#777"
-                            />
-                            <TouchableOpacity
-                                style={styles.searchButton}
-                                onPress={() => setCurrentCityFunc()}
-                            >
-                                <Feather name="search" size={18} color={colors.white} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.searchCross}>
-                            <TouchableOpacity
-                                onPress={() => setCurrentWeather()}
-                            >
-                                <Feather name="crosshair" size={24} color={colors.white} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    <View style={styles.header}>
-                        <View>
-                            <View style={styles.subTitle}>
-                                <Feather name="crosshair" size={14} color={colors.blue} />
-                                <Text style={styles.textLocalization}>Your Localization Now</Text>
+            <ImageBackground
+                source={{
+                    uri: weatherBg
+                        ? weatherBg
+                        : 'https://images.unsplash.com/photo-1529528744093-6f8abeee511d?ixid=MnwyNDY5NDJ8MHwxfHNlYXJjaHwxfHxjbG91ZHN8ZW58MHx8fHwxNjI2NzAxNzU1&ixlib=rb-1.2.1'
+                }}
+                resizeMode="cover"
+                style={styles.backgroundImage}
+            >
+                <View style={styles.overlay}></View>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <View style={styles.content}>
+                        <View style={styles.searchWrap}>
+                            <View style={{ position: 'relative', width: '100%', flex: 1 }}>
+                                <TextInput
+                                    style={styles.searchInput}
+                                    placeholder={'Search'}
+                                    onChangeText={setCurrentCity}
+                                    placeholderTextColor="#777"
+                                    returnKeyType="search"
+                                />
+                                <TouchableOpacity
+                                    style={styles.searchButton}
+                                    onPress={() => setCurrentCityFunc()}
+                                >
+                                    <Feather name="search" size={18} color={colors.white} />
+                                </TouchableOpacity>
                             </View>
-                            <Text style={styles.localization}>{location} - {hours}</Text>
+                            <View style={styles.searchCross}>
+                                <TouchableOpacity
+                                    onPress={() => setCurrentWeather()}
+                                >
+                                    <Feather name="crosshair" size={24} color={colors.white} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        <View style={styles.header}>
+                            <View>
+                                <View style={styles.subTitle}>
+                                    <Feather name="clock" size={14} color={colors.blue} />
+                                    <Text style={styles.textLocalization}>Ultima Atualização: {hours}</Text>
+                                </View>
+                                <Text style={styles.localization}>{location}</Text>
+                            </View>
+                        </View>
+                        <WeatherIcon icon={weatherIcon} />
+                        <Text style={styles.badge}>{weatherMainDescription}</Text>
+                        <Text style={styles.tempNow}>{currentTemperature}ºC</Text>
+                        <View style={styles.wrapMaxMin}>
+                            <View style={styles.contentMaxMin}>
+                                <Feather name="arrow-up" size={24} color={colors.blue} style={styles.icoExtra} />
+                                <Text style={styles.textExtra}>{tempMax}ºC</Text>
+                            </View>
+                            <View style={styles.contentMaxMin}>
+                                <Feather name="arrow-down" size={24} color={colors.blue} style={styles.icoExtra} />
+                                <Text style={styles.textExtra}>{tempMin}ºC</Text>
+                            </View>
+                        </View>
+                        <View style={styles.wrapExtras}>
+                            <View style={styles.contentExra}>
+                                <Feather name="wind" size={24} color={colors.blue} style={styles.icoExtra} />
+                                <Text style={styles.textExtra}>{wind}ms/h</Text>
+                            </View>
+                            <View style={styles.contentExra}>
+                                <Feather name="droplet" size={24} color={colors.blue} style={styles.icoExtra} />
+                                <Text style={styles.textExtra}>{humidity}%</Text>
+                            </View>
+                            <View style={styles.contentExra}>
+                                <Feather name="chevrons-down" size={24} color={colors.blue} style={styles.icoExtra} />
+                                <Text style={styles.textExtra}>{pressure}hPa</Text>
+                            </View>
+                        </View>
+                        <View style={styles.alertWrap}>
+                            <View></View>
+                            <View></View>
                         </View>
                     </View>
-                    <WeatherIcon icon={weatherIcon} />
-                    <Text style={styles.badge}>{weatherMainDescription}</Text>
-                    <Text style={styles.tempNow}>{currentTemperature}ºC</Text>
-                    <View style={styles.wrapMaxMin}>
-                        <View style={styles.contentMaxMin}>
-                            <Feather name="arrow-up" size={24} color={colors.blue} style={styles.icoExtra} />
-                            <Text style={styles.textExtra}>{tempMax}ºC</Text>
-                        </View>
-                        <View style={styles.contentMaxMin}>
-                            <Feather name="arrow-down" size={24} color={colors.blue} style={styles.icoExtra} />
-                            <Text style={styles.textExtra}>{tempMin}ºC</Text>
-                        </View>
-                    </View>
-                    <View style={styles.wrapExtras}>
-                        <View style={styles.contentExra}>
-                            <Feather name="wind" size={24} color={colors.blue} style={styles.icoExtra} />
-                            <Text style={styles.textExtra}>{wind}ms/h</Text>
-                        </View>
-                        <View style={styles.contentExra}>
-                            <Feather name="droplet" size={24} color={colors.blue} style={styles.icoExtra} />
-                            <Text style={styles.textExtra}>{humidity}%</Text>
-                        </View>
-                        <View style={styles.contentExra}>
-                            <Feather name="chevrons-down" size={24} color={colors.blue} style={styles.icoExtra} />
-                            <Text style={styles.textExtra}>{pressure}hPa</Text>
-                        </View>
-                    </View>
-                    <View style={styles.alertWrap}>
-                        <View></View>
-                        <View></View>
-                    </View>
-                </View>
-            </TouchableWithoutFeedback>
+                </TouchableWithoutFeedback>
+            </ImageBackground>
         </SafeAreaView>
     );
 }

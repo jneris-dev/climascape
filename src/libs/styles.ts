@@ -7,6 +7,20 @@ export default StyleSheet.create({
         flex: 1,
         backgroundColor: colors.background,
     },
+    backgroundImage: {
+        flex: 1,
+        justifyContent: "center",
+    },
+    overlay: {
+        flex: 1,
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        opacity: 0.7,
+        backgroundColor: '#000',
+        height: '100%',
+        width: '100%',
+    },
     content: {
         flex: 1,
         width: '100%',
@@ -26,7 +40,8 @@ export default StyleSheet.create({
         paddingRight: 15,
         height: 44,
         borderRadius: 22,
-        backgroundColor: colors.background_dark,
+        borderWidth: 1,
+        borderColor: '#777',
         color: colors.white,
         width: '100%'
     },

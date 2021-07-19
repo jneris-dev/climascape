@@ -63,3 +63,32 @@ export async function getCurrentCity(currentCity: any) {
 
     return results
 }
+
+export async function getBackground(info: any) {
+    const axios = require('axios')
+
+    const getWt = info ? info : 'clouds'
+
+    const weather = getWt.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-")
+
+    console.log(weather)
+
+    const id = 'OmqqhmWQ3m3d51W342SSB36y6FivVSuPnjjc2inj8SU'
+
+    const url = `https://api.unsplash.com/search/photos?query=${weather}&client_id=${id}`
+
+    var results: any = []
+
+    await axios.get(url).then(function (response: any) {
+        const data = response.data
+
+        const img = data.results[0].urls.regular
+
+        return results = [img]
+
+    }).catch(function (error: any) {
+        console.log(error)
+    })
+
+    return results
+}

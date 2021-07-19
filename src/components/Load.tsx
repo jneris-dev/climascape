@@ -4,6 +4,7 @@ import {
     View,
 } from 'react-native';
 import LottieView from 'lottie-react-native';
+import { StatusBar } from 'expo-status-bar';
 
 import loadAnimation from '../assets/load.json';
 import colors from '../libs/colors';
@@ -17,6 +18,7 @@ export function Load() {
                 loop
                 style={styles.animation}
             />
+            <StatusBar style="dark" />
         </View>
     )
 }
