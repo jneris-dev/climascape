@@ -23,8 +23,9 @@ export async function getCurrentWeather(resolvedLocation: any) {
         const pressure = data.main.pressure
         const weatherMainDescription = data.weather[0].description
         const weatherIcon = data.weather[0].icon
+        const feelsLike = data.main.feels_like
 
-        return results = [currentTemperature, tempMin, tempMax, location, wind, humidity, pressure, weatherMainDescription, weatherIcon]
+        return results = [currentTemperature, tempMin, tempMax, location, wind, humidity, pressure, weatherMainDescription, weatherIcon, feelsLike]
 
     }).catch(function (error: any) {
         console.log(error)
@@ -69,20 +70,24 @@ export async function getBackground(info: any) {
 
     const getWt = info ? info : 'clouds'
 
-    const weather = getWt.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-")
+    const weather = getWt.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/ /g, "%20")
 
-    console.log(weather)
+    const unsplash_id = 'OmqqhmWQ3m3d51W342SSB36y6FivVSuPnjjc2inj8SU'
+    const pexels_id = '563492ad6f91700001000001f0fa6d16b37447a58676073d7d806750'
 
-    const id = 'OmqqhmWQ3m3d51W342SSB36y6FivVSuPnjjc2inj8SU'
-
-    const url = `https://api.unsplash.com/search/photos?query=${weather}&client_id=${id}`
+    const unsplash_url = `https://api.unsplash.com/search/photos?query=${weather}&client_id=${unsplash_id}`
+    const pexels_url = `https://api.pexels.com/v1/search?query=${weather}%20environment&per_page=1`
 
     var results: any = []
 
-    await axios.get(url).then(function (response: any) {
+    await axios.get(pexels_url, {
+        headers: {
+            Authorization: pexels_id
+        }
+    }).then(function (response: any) {
         const data = response.data
 
-        const img = data.results[0].urls.regular
+        const img = data.photos[0].src.portrait
 
         return results = [img]
 

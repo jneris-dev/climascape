@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, ImageBackground } from 'react-native';
+import { Text, View, ImageBackground, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { getCurrentWeather, getCurrentCity, getBackground } from '../libs/api';
-import { Load } from '../components/Load';
-import { WeatherIcon } from '../components/WeatherIcon';
+import { getCurrentWeather, getBackground } from '../../libs/api';
+import { Load } from '../../components/Load';
+import { WeatherIcon } from '../../components/WeatherIcon';
 
-import styles from '../libs/styles';
-import colors from '../libs/colors';
+import styles from './styles';
+import colors from '../../libs/colors';
 
 export type location = {
     latitude: string | number,
@@ -22,7 +22,7 @@ const callback: location = {
     longitude: '-46.6388'
 }
 
-export function Home() {
+export const HomeScreen = () => {
 
     const [currentTemperature, setCurrentTemperature] = useState<number>()
     const [location, setLocation] = useState('')
@@ -39,15 +39,16 @@ export function Home() {
     const [weatherMainDescription, setweatherMainDescription] = useState('')
     const [weatherIcon, setWeatherIcon] = useState('')
 
-    const [currentCity, setCurrentCity] = useState('')
     const [weatherBg, setWeatherBg] = useState('')
 
     async function getLocation() {
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
             setErrorMsg('Permission to access location was denied');
-            return;
+            setLoading(true)
         }
+
+        setLoading(false)
 
         const location = await Location.getCurrentPositionAsync({});
         return location.coords
@@ -84,32 +85,6 @@ export function Home() {
         setLoading(false)
     }
 
-    async function setCurrentCityFunc() {
-        setLoading(true)
-
-        const city = currentCity ? currentCity : location
-
-        const data = await getCurrentCity(city)
-
-        setCurrentTemperature(parseInt(data[0]))
-        setTempMin(parseInt(data[1]))
-        setTempMax(parseInt(data[2]))
-        setLocation(data[3])
-        setWind(data[4])
-        setHumidity(data[5])
-        setPressure(data[6])
-        setweatherMainDescription(data[7])
-        setWeatherIcon(data[8])
-
-        const info = data[7]
-
-        const bg = await getBackground(info)
-
-        setWeatherBg(bg[0])
-
-        setLoading(false)
-    }
-
     function convertKelvinToC(kelvin: string) {
         let K = parseInt(kelvin, 10)
         return K - 273
@@ -117,7 +92,6 @@ export function Home() {
 
     useEffect(() => {
         setCurrentWeather()
-        setCurrentCityFunc()
     }, [])
 
     if (loading)
@@ -135,43 +109,17 @@ export function Home() {
                 style={styles.backgroundImage}
             >
                 <LinearGradient
-                    colors={['rgba(0,0,0,.7)', 'rgba(0,0,0,.5)', 'rgba(0,0,0,.3)', 'rgba(0,0,0,.5)', 'rgba(0,0,0,.8)', '#000']}
+                    colors={['rgba(0,0,0,.7)', 'rgba(0,0,0,.5)', 'rgba(0,0,0,.3)', 'rgba(0,0,0,.4)', 'rgba(0,0,0,.7)', 'rgba(0,0,0,.8)', '#000']}
                     style={styles.overlay}
                 >
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                    >
                         <View style={styles.content}>
-                            <View style={styles.searchWrap}>
-                                <View style={{ position: 'relative', width: '100%', flex: 1 }}>
-                                    <TextInput
-                                        style={styles.searchInput}
-                                        placeholder={'Search'}
-                                        onChangeText={setCurrentCity}
-                                        placeholderTextColor="#999"
-                                        returnKeyType="search"
-                                    />
-                                    <TouchableOpacity
-                                        style={styles.searchButton}
-                                        onPress={() => setCurrentCityFunc()}
-                                    >
-                                        <Feather name="search" size={18} color={colors.white} />
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={styles.searchCross}>
-                                    <TouchableOpacity
-                                        onPress={() => setCurrentWeather()}
-                                    >
-                                        <Feather name="crosshair" size={24} color={colors.white} />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
                             <View style={styles.header}>
-                                <View>
-                                    <View style={styles.subTitle}>
-                                        <Feather name="clock" size={14} color={colors.white} />
-                                        <Text style={styles.textLocalization}>Last Update: {hours}</Text>
-                                    </View>
-                                    <Text style={styles.localization}>{location}</Text>
-                                </View>
+                                <Feather name="crosshair" size={18} color={colors.white} />
+                                <Text style={styles.localization}>{location}</Text>
                             </View>
                             <WeatherIcon icon={weatherIcon} />
                             <Text style={styles.badge}>{weatherMainDescription}</Text>
@@ -201,7 +149,7 @@ export function Home() {
                                 </View>
                             </View>
                         </View>
-                    </TouchableWithoutFeedback>
+                    </ScrollView>
                 </LinearGradient>
             </ImageBackground>
         </SafeAreaView>

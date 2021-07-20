@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "zeus",
-    "slug": "zeus",
+    "name": "Climascape",
+    "slug": "Climascape",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,7 +27,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1A1821"
       },
-      "package": "com.jneris.zeus"
+      "package": "com.jneris.climascape"
     },
     "web": {
       "favicon": "./assets/favicon.png"

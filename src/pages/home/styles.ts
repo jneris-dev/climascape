@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import colors from './colors';
-import fonts from './fonts';
+import colors from '../../libs/colors';
+import fonts from '../../libs/fonts';
 
 export default StyleSheet.create({
     container: {
@@ -23,64 +23,18 @@ export default StyleSheet.create({
         flex: 1,
         width: '100%',
         alignItems: 'center',
-        paddingTop: 30,
-        paddingHorizontal: 30,
-    },
-    searchWrap: {
-        width: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 30,
-    },
-    searchInput: {
-        paddingLeft: 25,
-        paddingRight: 15,
-        height: 44,
-        borderRadius: 22,
-        borderWidth: 1,
-        borderColor: '#999',
-        color: colors.white,
-        width: '100%'
-    },
-    searchButton: {
-        width: 60,
-        backgroundColor: colors.purple,
-        height: 34,
-        position: 'absolute',
-        right: 10,
-        top: 5,
-        borderRadius: 25,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    searchCross: {
-        width: 'auto',
-        paddingLeft: 15
+        padding: 30
     },
     header: {
-        width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 13,
-    },
-    subTitle: {
-        width: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 5,
-    },
-    textLocalization: {
-        color: colors.white,
-        fontSize: 12,
-        marginLeft: 5,
-        fontFamily: fonts.text,
+        marginBottom: 15,
     },
     localization: {
         color: colors.white,
-        fontSize: 18,
+        fontSize: 20,
         fontFamily: fonts.text,
+        marginLeft: 10,
     },
     badge: {
         backgroundColor: colors.purple,
@@ -114,7 +68,7 @@ export default StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
-        marginTop: 45,
+        marginTop: 25,
         paddingHorizontal: 10,
     },
     contentExra: {
@@ -127,5 +81,10 @@ export default StyleSheet.create({
     textExtra: {
         color: colors.white,
         fontFamily: fonts.text,
+    },
+    wrapNext: {
+        marginTop: 40,
+        alignItems: 'center',
+        flexDirection: 'row',
     },
 });
