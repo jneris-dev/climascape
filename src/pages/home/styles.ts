@@ -7,18 +7,6 @@ export default StyleSheet.create({
         flex: 1,
         backgroundColor: colors.background,
     },
-    backgroundImage: {
-        flex: 1,
-        justifyContent: "center",
-    },
-    overlay: {
-        flex: 1,
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        height: '100%',
-        width: '100%',
-    },
     content: {
         flex: 1,
         width: '100%',
@@ -26,65 +14,108 @@ export default StyleSheet.create({
         padding: 30
     },
     header: {
+        width: '100%',
+        textAlign: 'left',
+        justifyContent: 'center',
+        flexDirection: 'row'
+    },
+    headerDate: {
+        color: colors.white,
+        fontSize: 18,
+        fontFamily: fonts.heading,
+    },
+    headerHour: {
+        color: colors.disabled,
+        fontSize: 18,
+        fontFamily: fonts.text,
+        marginLeft: 5
+    },
+    wrapWeather: {
+        width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 15,
-    },
-    localization: {
-        color: colors.white,
-        fontSize: 20,
-        fontFamily: fonts.text,
-        marginLeft: 10,
-    },
-    badge: {
-        backgroundColor: colors.purple,
-        borderRadius: 20,
-        paddingHorizontal: 25,
-        paddingVertical: 5,
-        color: colors.white,
-        fontFamily: fonts.text,
-        marginBottom: 10,
-        textTransform: 'capitalize',
+        justifyContent: 'center',
+        marginVertical: 30
     },
     tempNow: {
         color: colors.white,
-        fontSize: 60,
+        fontSize: 80,
+        paddingLeft: 15,
         fontFamily: fonts.text,
     },
-    wrapMaxMin: {
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
-        marginTop: 20,
-    },
-    contentMaxMin: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 15,
+    badge: {
+        color: colors.white,
+        fontFamily: fonts.text,
+        fontSize: 18,
+        textTransform: 'capitalize',
     },
     wrapExtras: {
         width: '100%',
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
         alignItems: 'center',
         flexDirection: 'row',
-        marginTop: 25,
+        marginTop: 30,
         paddingHorizontal: 10,
     },
     contentExra: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
     },
     icoExtra: {
-        marginRight: 5,
+        marginBottom: 13,
     },
     textExtra: {
         color: colors.white,
         fontFamily: fonts.text,
+        fontSize: 15,
     },
-    wrapNext: {
+    alert: {
+        marginTop: 40,
+        flex: 1,
+        borderRadius: 10,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        paddingHorizontal: 15,
+        paddingVertical: 18,
+        borderWidth: 1,
+        borderColor: colors.green
+    },
+    alertText: {
+        width: '100%',
+        marginLeft: 15,
+    },
+    alertTitle: {
+        color: colors.green,
+        fontFamily: fonts.heading,
+        fontSize: 18,
+        marginBottom: 5,
+    },
+    alertDesc: {
+        color: colors.white,
+        fontFamily: fonts.text,
+        fontSize: 13,
+    },
+    mightNeed: {
+        width: '100%',
         marginTop: 40,
         alignItems: 'center',
+    },
+    mightNeedTitle: {
+        fontSize: 15,
+        fontFamily: fonts.heading,
+        marginBottom: 25,
+        color: colors.white,
+    },
+    mightNeedWrap: {
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-around',
         flexDirection: 'row',
     },
+    mightNeedContent: {
+        paddingHorizontal: 15
+    },
+    mightNeedContentText: {
+        color: colors.white
+    }
 });

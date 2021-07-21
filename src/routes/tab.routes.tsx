@@ -12,20 +12,16 @@ const AppTab = createBottomTabNavigator();
 const AuthRoutes = () => {
     return (
         <AppTab.Navigator tabBarOptions={{
-            activeTintColor: colors.pink,
+            activeTintColor: colors.green,
             inactiveTintColor: colors.disabled,
             showLabel: false,
             style: {
                 paddingVertical: Platform.OS === 'ios' ? 20 : 0,
                 height: Platform.OS === 'ios' ? 78 : 60,
-                backgroundColor: 'transparent',
+                backgroundColor: colors.background,
                 shadowOpacity: 0,
                 elevation: 0,
                 borderTopWidth: 0,
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0
             }
         }}>
             <AppTab.Screen

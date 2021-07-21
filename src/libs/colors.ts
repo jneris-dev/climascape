@@ -1,9 +1,7 @@
 export default {
-    background: '#1d2933',
-    background_dark: '#081b24',
-    blue: '#607c9f',
+    background: '#111E2B',
+    background_light: '#274462',
     white: '#FFFFFF',
-    pink: '#df79b2',
-    purple: '#363361',
+    green: '#48CD91',
     disabled: '#43576F',
 };

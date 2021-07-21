@@ -7,10 +7,35 @@ import {
 
 import colors from '../libs/colors';
 
-export function Card() {
+export function Card(addDay: any, icone: any) {
+    const dayOffset = addDay.addDay
+    const iconeW = icone
+    console.log(icone)
+
+    let date = new Date()
+
+    function setNextDay(x: any) {
+        var nextDate = date.setDate(new Date().getDate() + x)
+        return nextDate
+    }
+
+    switch (dayOffset) {
+        case '1':
+            setNextDay(1)
+            break;
+        case '2':
+            setNextDay(2)
+            break;
+        case '3':
+            setNextDay(3)
+            break;
+    }
+
+    var dayNow = date.getDate()
+
     return (
         <View style={styles.container}>
-            <Text>TEST</Text>
+            <Text>Day {dayNow}</Text>
         </View>
     )
 }

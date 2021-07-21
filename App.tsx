@@ -1,5 +1,6 @@
 import React from 'react';
 import AppLoading from 'expo-app-loading';
+import { StatusBar } from 'expo-status-bar';
 
 import {
 	useFonts,
@@ -15,7 +16,12 @@ export default function App() {
 	});
 
 	if (!fontsLoaded)
-		return <AppLoading />
+		return (
+			<>
+				<AppLoading />
+				<StatusBar hidden />
+			</>
+		)
 
 	return (
 		<Routes />

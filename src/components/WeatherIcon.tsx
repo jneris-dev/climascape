@@ -92,9 +92,7 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
     tempIcon: {
-        marginTop: 15,
-        marginBottom: 35,
-        width: 130,
-        height: 130,
+        width: 120,
+        height: 120,
     },
 })

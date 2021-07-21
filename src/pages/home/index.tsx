@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, ImageBackground, ScrollView } from 'react-native';
+import { Text, View, ScrollView, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import * as Location from 'expo-location';
-import { LinearGradient } from 'expo-linear-gradient';
 
-import { getCurrentWeather, getBackground } from '../../libs/api';
+import { getCurrentWeather } from '../../libs/api';
 import { Load } from '../../components/Load';
 import { WeatherIcon } from '../../components/WeatherIcon';
 
@@ -23,23 +22,21 @@ const callback: location = {
 }
 
 export const HomeScreen = () => {
-
-    const [currentTemperature, setCurrentTemperature] = useState<number>()
-    const [location, setLocation] = useState('')
-    const [hours, setHours] = useState('')
+    const [loading, setLoading] = useState(true)
     const [errorMsg, setErrorMsg] = useState('')
 
-    const [loading, setLoading] = useState(true);
+    const [hours, setHours] = useState('')
+    const [dateCurrent, setDateCurrent] = useState('')
 
+    const [currentTemperature, setCurrentTemperature] = useState<number>()
     const [wind, setWind] = useState('')
-    const [tempMin, setTempMin] = useState<number>()
-    const [tempMax, setTempMax] = useState<number>()
     const [humidity, setHumidity] = useState('')
     const [pressure, setPressure] = useState('')
     const [weatherMainDescription, setweatherMainDescription] = useState('')
     const [weatherIcon, setWeatherIcon] = useState('')
-
-    const [weatherBg, setWeatherBg] = useState('')
+    const [feelsLike, setFeelsLike] = useState<number>()
+    const [alertEvent, setalertEvent] = useState('')
+    const [alertDesc, setalertDesc] = useState('')
 
     async function getLocation() {
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -54,10 +51,19 @@ export const HomeScreen = () => {
         return location.coords
     }
 
+    let date = new Date()
+
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+    var monthName = months[date.getMonth()]
+    var dayName = days[date.getDay()]
+
     async function setCurrentWeather() {
         setLoading(true)
 
-        let date = new Date()
+        setDateCurrent(dayName + ', ' + monthName + " " + date.getDate())
+
         setHours(date.getHours() + ':' + ('0' + date.getMinutes()).slice(-2))
 
         const location = await getLocation()
@@ -66,28 +72,28 @@ export const HomeScreen = () => {
 
         const data = await getCurrentWeather(resolvedLocation)
 
-        setCurrentTemperature(convertKelvinToC(data[0]))
-        setTempMin(convertKelvinToC(data[1]))
-        setTempMax(convertKelvinToC(data[2]))
-        setLocation(data[3])
-        setWind(data[4])
-        setHumidity(data[5])
-        setPressure(data[6])
-        setweatherMainDescription(data[7])
-        setWeatherIcon(data[8])
+        setCurrentTemperature(parseInt(data[0]))
+        setWind(data[2])
+        setHumidity(data[3])
+        setPressure(data[4])
+        setweatherMainDescription(data[5])
+        setWeatherIcon(data[6])
+        setFeelsLike(data[7])
+        setalertEvent(data[8])
+        setalertDesc(data[9])
 
-        const info = data ? data[7] : 'clouds'
+        var SunCalc = require('suncalc');
+        var times = SunCalc.getTimes(new Date(), resolvedLocation.latitude, resolvedLocation.longitude)
 
-        const bg = await getBackground(info)
+        var sunriseHr = times.sunrise.getHours()
+        var sunriseMin = times.sunrise.getMinutes()
+        var sunriseStr = ("0" + sunriseHr).slice(-2) + ':' + ("0" + sunriseMin).slice(-2)
 
-        setWeatherBg(bg[0])
+        var sunsetHr = times.sunset.getHours()
+        var sunsetMin = times.sunset.getMinutes()
+        var sunsetStr = ("0" + sunsetHr).slice(-2) + ':' + ("0" + sunsetMin).slice(-2)
 
         setLoading(false)
-    }
-
-    function convertKelvinToC(kelvin: string) {
-        let K = parseInt(kelvin, 10)
-        return K - 273
     }
 
     useEffect(() => {
@@ -99,59 +105,65 @@ export const HomeScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <ImageBackground
-                source={{
-                    uri: weatherBg
-                        ? weatherBg
-                        : 'https://images.unsplash.com/photo-1529528744093-6f8abeee511d?ixid=MnwyNDY5NDJ8MHwxfHNlYXJjaHwxfHxjbG91ZHN8ZW58MHx8fHwxNjI2NzAxNzU1&ixlib=rb-1.2.1'
-                }}
-                resizeMode="cover"
-                style={styles.backgroundImage}
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={loading}
+                        onRefresh={() => setCurrentWeather()}
+                    />
+                }
             >
-                <LinearGradient
-                    colors={['rgba(0,0,0,.7)', 'rgba(0,0,0,.5)', 'rgba(0,0,0,.3)', 'rgba(0,0,0,.4)', 'rgba(0,0,0,.7)', 'rgba(0,0,0,.8)', '#000']}
-                    style={styles.overlay}
-                >
-                    <ScrollView
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                    >
-                        <View style={styles.content}>
-                            <View style={styles.header}>
-                                <Feather name="crosshair" size={18} color={colors.white} />
-                                <Text style={styles.localization}>{location}</Text>
-                            </View>
-                            <WeatherIcon icon={weatherIcon} />
-                            <Text style={styles.badge}>{weatherMainDescription}</Text>
-                            <Text style={styles.tempNow}>{currentTemperature}ºC</Text>
-                            <View style={styles.wrapMaxMin}>
-                                <View style={styles.contentMaxMin}>
-                                    <Feather name="arrow-up" size={24} color={colors.blue} style={styles.icoExtra} />
-                                    <Text style={styles.textExtra}>{tempMax}ºC</Text>
-                                </View>
-                                <View style={styles.contentMaxMin}>
-                                    <Feather name="arrow-down" size={24} color={colors.blue} style={styles.icoExtra} />
-                                    <Text style={styles.textExtra}>{tempMin}ºC</Text>
-                                </View>
-                            </View>
-                            <View style={styles.wrapExtras}>
-                                <View style={styles.contentExra}>
-                                    <Feather name="wind" size={24} color={colors.blue} style={styles.icoExtra} />
-                                    <Text style={styles.textExtra}>{wind}ms/h</Text>
-                                </View>
-                                <View style={styles.contentExra}>
-                                    <Feather name="droplet" size={24} color={colors.blue} style={styles.icoExtra} />
-                                    <Text style={styles.textExtra}>{humidity}%</Text>
-                                </View>
-                                <View style={styles.contentExra}>
-                                    <Feather name="chevrons-down" size={24} color={colors.blue} style={styles.icoExtra} />
-                                    <Text style={styles.textExtra}>{pressure}hPa</Text>
-                                </View>
+                <View style={styles.content}>
+                    <View style={styles.header}>
+                        <Text style={styles.headerDate}>{dateCurrent}</Text>
+                        <Text style={styles.headerHour}>{hours}</Text>
+                    </View>
+                    <View style={styles.wrapWeather}>
+                        <WeatherIcon icon={weatherIcon} />
+                        <Text style={styles.tempNow}>{currentTemperature}º</Text>
+                    </View>
+                    <Text style={styles.badge}>{weatherMainDescription}</Text>
+                    <View style={styles.wrapExtras}>
+                        <View style={styles.contentExra}>
+                            <Feather name="wind" size={28} color={colors.green} style={styles.icoExtra} />
+                            <Text style={styles.textExtra}>{wind}m/s</Text>
+                        </View>
+                        <View style={styles.contentExra}>
+                            <Feather name="droplet" size={28} color={colors.green} style={styles.icoExtra} />
+                            <Text style={styles.textExtra}>{humidity}%</Text>
+                        </View>
+                        <View style={styles.contentExra}>
+                            <Feather name="chevrons-down" size={28} color={colors.green} style={styles.icoExtra} />
+                            <Text style={styles.textExtra}>{pressure}hPa</Text>
+                        </View>
+                    </View>
+                    {alertEvent
+                        ? <View style={styles.alert}>
+                            <View style={styles.alertText}>
+                                <Text style={styles.alertTitle}>{alertEvent}</Text>
+                                <Text style={styles.alertDesc}>{alertDesc}</Text>
                             </View>
                         </View>
-                    </ScrollView>
-                </LinearGradient>
-            </ImageBackground>
+                        : null
+                    }
+                    <View style={styles.mightNeed}>
+                        <Text style={styles.mightNeedTitle}>You might need:</Text>
+                        <View style={styles.mightNeedWrap}>
+                            <View style={styles.mightNeedContent}>
+                                <Text style={styles.mightNeedContentText}>a</Text>
+                            </View>
+                            <View style={styles.mightNeedContent}>
+                                <Text style={styles.mightNeedContentText}>a</Text>
+                            </View>
+                            <View style={styles.mightNeedContent}>
+                                <Text style={styles.mightNeedContentText}>a</Text>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </ScrollView>
         </SafeAreaView>
     );
 }
