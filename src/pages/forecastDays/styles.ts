@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native"
 import colors from '../../libs/colors'
-import fonts from '../../libs/fonts'
 
 export default StyleSheet.create({
     container: {
@@ -11,6 +10,10 @@ export default StyleSheet.create({
         flex: 1,
         width: '100%',
         alignItems: 'center',
+        justifyContent: 'center',
         padding: 30
     },
+    forecastText: {
+        color: colors.white
+    }
 })

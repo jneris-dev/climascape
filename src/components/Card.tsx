@@ -7,10 +7,8 @@ import {
 
 import colors from '../libs/colors';
 
-export function Card(addDay: any, icone: any) {
+export function Card(addDay: any) {
     const dayOffset = addDay.addDay
-    const iconeW = icone
-    console.log(icone)
 
     let date = new Date()
 

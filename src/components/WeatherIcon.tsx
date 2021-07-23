@@ -5,9 +5,9 @@ import {
     StyleSheet
 } from 'react-native'
 
-export function WeatherIcon(icon: any) {
+export function WeatherIcon({ icon, size, ...rest }: any) {
 
-    const currentIcon = icon.icon
+    const currentIcon = icon
 
     function displayIcon() {
         switch (currentIcon) {
@@ -80,7 +80,7 @@ export function WeatherIcon(icon: any) {
         <View style={styles.weatherWrapp}>
             <Image
                 source={displayIcon()}
-                style={styles.tempIcon}
+                style={{ width: size, height: size }}
             />
         </View>
     )
@@ -90,9 +90,5 @@ const styles = StyleSheet.create({
     weatherWrapp: {
         width: 'auto',
         position: 'relative',
-    },
-    tempIcon: {
-        width: 120,
-        height: 120,
     },
 })

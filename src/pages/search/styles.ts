@@ -13,6 +13,18 @@ export default StyleSheet.create({
         alignItems: 'center',
         padding: 30
     },
+    notSearch: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    notSearchTitle: {
+        color: colors.white,
+        fontFamily: fonts.heading,
+        fontSize: 25,
+        marginTop: 10,
+        textAlign: 'center'
+    },
     searchWrap: {
         width: '100%',
         flexDirection: 'row',
@@ -32,7 +44,6 @@ export default StyleSheet.create({
     },
     searchButton: {
         width: 60,
-        backgroundColor: colors.purple,
         height: 34,
         position: 'absolute',
         right: 10,
@@ -41,8 +52,25 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    searchCross: {
-        width: 'auto',
-        paddingLeft: 15
+    contentResult: {
+        flex: 1,
+        marginTop: 20,
     },
+    contentResultTop: {
+        width: '100%',
+        alignItems: 'center'
+    },
+    contentResultLocal: {
+        fontSize: 30,
+        fontFamily: fonts.text,
+        color: colors.white,
+        marginTop: 10
+    },
+    contentResultDesc: {
+        color: colors.white,
+        fontFamily: fonts.text,
+        fontSize: 18,
+        marginTop: 5,
+        textTransform: 'capitalize'
+    }
 })

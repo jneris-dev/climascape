@@ -23,6 +23,10 @@ const AppRoutes: React.FC = () => (
             name="SearchScreen"
             component={AuthRoutes}
         />
+        <stackRoutes.Screen
+            name="ForecastDays"
+            component={AuthRoutes}
+        />
     </stackRoutes.Navigator>
 )
 

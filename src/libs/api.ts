@@ -19,14 +19,33 @@ export async function getCurrentWeather(resolvedLocation: any) {
         const wind = data.current.wind_speed
         const humidity = data.current.humidity
         const pressure = data.current.pressure
+        const weatherMain = data.current.weather[0].main
         const weatherMainDescription = data.current.weather[0].description
         const weatherIcon = data.current.weather[0].icon
         const feelsLike = data.current.feels_like
-        const alertEvent = data.alerts[0].event
-        const alertDesc = data.alerts[0].description
 
-        return results = [currentTemperature, location, wind, humidity,
-            pressure, weatherMainDescription, weatherIcon, feelsLike, alertEvent, alertDesc]
+        const alertEvent = data.alerts ? data.alerts[0].event : null
+        const alertDesc = data.alerts ? data.alerts[0].description : null
+        const alertSenderName = data.alerts ? data.alerts[0].sender_name : null
+        const alertStart = data.alerts ? data.alerts[0].start : null
+        const alertEnd = data.alerts ? data.alerts[0].end : null
+
+        return results = [
+            currentTemperature,
+            location,
+            wind,
+            humidity,
+            pressure,
+            weatherMain,
+            weatherMainDescription,
+            weatherIcon,
+            feelsLike,
+            alertEvent,
+            alertDesc,
+            alertSenderName,
+            alertStart,
+            alertEnd
+        ]
 
     }).catch(function (error: any) {
         console.log(error)
@@ -46,17 +65,35 @@ export async function getCurrentCity(currentCity: any) {
     await axios.get(url).then(function (response: any) {
         const data = response.data
 
+        const location = data.list[0].name
         const currentTemperature = data.list[0].main.temp
+        const feels_like = data.list[0].main.feels_like
         const tempMin = data.list[0].main.temp_min
         const tempMax = data.list[0].main.temp_max
-        const location = (data.list[0].name + ', ' + data.list[0].sys.country)
-        const wind = data.list[0].wind.speed
         const humidity = data.list[0].main.humidity
-        const pressure = data.list[0].main.pressure
+        const dt = data.list[0].dt
+        const wind = data.list[0].wind.speed
+        const country = data.list[0].sys.country
+        const rain = data.list[0].rain
+        const snow = data.list[0].snow
         const weatherMainDescription = data.list[0].weather[0].description
         const weatherIcon = data.list[0].weather[0].icon
 
-        return results = [currentTemperature, tempMin, tempMax, location, wind, humidity, pressure, weatherMainDescription, weatherIcon]
+        return results = [
+            location,
+            currentTemperature,
+            feels_like,
+            tempMin,
+            tempMax,
+            humidity,
+            dt,
+            wind,
+            country,
+            rain,
+            snow,
+            weatherMainDescription,
+            weatherIcon
+        ]
 
     }).catch(function (error: any) {
         console.log(error)

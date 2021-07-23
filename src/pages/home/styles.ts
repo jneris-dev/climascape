@@ -25,7 +25,7 @@ export default StyleSheet.create({
         fontFamily: fonts.heading,
     },
     headerHour: {
-        color: colors.disabled,
+        color: colors.green,
         fontSize: 18,
         fontFamily: fonts.text,
         marginLeft: 5
@@ -35,7 +35,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: 30
+        marginVertical: 50
     },
     tempNow: {
         color: colors.white,
@@ -51,7 +51,7 @@ export default StyleSheet.create({
     },
     wrapExtras: {
         width: '100%',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
         marginTop: 30,
@@ -69,53 +69,4 @@ export default StyleSheet.create({
         fontFamily: fonts.text,
         fontSize: 15,
     },
-    alert: {
-        marginTop: 40,
-        flex: 1,
-        borderRadius: 10,
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        paddingHorizontal: 15,
-        paddingVertical: 18,
-        borderWidth: 1,
-        borderColor: colors.green
-    },
-    alertText: {
-        width: '100%',
-        marginLeft: 15,
-    },
-    alertTitle: {
-        color: colors.green,
-        fontFamily: fonts.heading,
-        fontSize: 18,
-        marginBottom: 5,
-    },
-    alertDesc: {
-        color: colors.white,
-        fontFamily: fonts.text,
-        fontSize: 13,
-    },
-    mightNeed: {
-        width: '100%',
-        marginTop: 40,
-        alignItems: 'center',
-    },
-    mightNeedTitle: {
-        fontSize: 15,
-        fontFamily: fonts.heading,
-        marginBottom: 25,
-        color: colors.white,
-    },
-    mightNeedWrap: {
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        flexDirection: 'row',
-    },
-    mightNeedContent: {
-        paddingHorizontal: 15
-    },
-    mightNeedContentText: {
-        color: colors.white
-    }
 });

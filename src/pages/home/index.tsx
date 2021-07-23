@@ -10,6 +10,7 @@ import { WeatherIcon } from '../../components/WeatherIcon';
 
 import styles from './styles';
 import colors from '../../libs/colors';
+import { YouMightNeed } from '../../components/YouMightNeed';
 
 export type location = {
     latitude: string | number,
@@ -23,6 +24,7 @@ const callback: location = {
 
 export const HomeScreen = () => {
     const [loading, setLoading] = useState(true)
+    const [refresh, setRefresh] = useState(false)
     const [errorMsg, setErrorMsg] = useState('')
 
     const [hours, setHours] = useState('')
@@ -32,11 +34,10 @@ export const HomeScreen = () => {
     const [wind, setWind] = useState('')
     const [humidity, setHumidity] = useState('')
     const [pressure, setPressure] = useState('')
+    const [weatherMain, setweatherMain] = useState('')
     const [weatherMainDescription, setweatherMainDescription] = useState('')
     const [weatherIcon, setWeatherIcon] = useState('')
     const [feelsLike, setFeelsLike] = useState<number>()
-    const [alertEvent, setalertEvent] = useState('')
-    const [alertDesc, setalertDesc] = useState('')
 
     async function getLocation() {
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -76,11 +77,10 @@ export const HomeScreen = () => {
         setWind(data[2])
         setHumidity(data[3])
         setPressure(data[4])
-        setweatherMainDescription(data[5])
-        setWeatherIcon(data[6])
-        setFeelsLike(data[7])
-        setalertEvent(data[8])
-        setalertDesc(data[9])
+        setweatherMain(data[5])
+        setweatherMainDescription(data[6])
+        setWeatherIcon(data[7])
+        setFeelsLike(parseInt(data[8]))
 
         var SunCalc = require('suncalc');
         var times = SunCalc.getTimes(new Date(), resolvedLocation.latitude, resolvedLocation.longitude)
@@ -94,6 +94,14 @@ export const HomeScreen = () => {
         var sunsetStr = ("0" + sunsetHr).slice(-2) + ':' + ("0" + sunsetMin).slice(-2)
 
         setLoading(false)
+    }
+
+    async function refreshApp() {
+        setRefresh(true)
+
+        await setCurrentWeather()
+
+        setRefresh(false)
     }
 
     useEffect(() => {
@@ -110,8 +118,9 @@ export const HomeScreen = () => {
                 showsHorizontalScrollIndicator={false}
                 refreshControl={
                     <RefreshControl
-                        refreshing={loading}
-                        onRefresh={() => setCurrentWeather()}
+                        refreshing={refresh}
+                        onRefresh={refreshApp}
+                        progressBackgroundColor={colors.green}
                     />
                 }
             >
@@ -121,7 +130,7 @@ export const HomeScreen = () => {
                         <Text style={styles.headerHour}>{hours}</Text>
                     </View>
                     <View style={styles.wrapWeather}>
-                        <WeatherIcon icon={weatherIcon} />
+                        <WeatherIcon icon={weatherIcon} size={120} />
                         <Text style={styles.tempNow}>{currentTemperature}º</Text>
                     </View>
                     <Text style={styles.badge}>{weatherMainDescription}</Text>
@@ -138,30 +147,12 @@ export const HomeScreen = () => {
                             <Feather name="chevrons-down" size={28} color={colors.green} style={styles.icoExtra} />
                             <Text style={styles.textExtra}>{pressure}hPa</Text>
                         </View>
-                    </View>
-                    {alertEvent
-                        ? <View style={styles.alert}>
-                            <View style={styles.alertText}>
-                                <Text style={styles.alertTitle}>{alertEvent}</Text>
-                                <Text style={styles.alertDesc}>{alertDesc}</Text>
-                            </View>
-                        </View>
-                        : null
-                    }
-                    <View style={styles.mightNeed}>
-                        <Text style={styles.mightNeedTitle}>You might need:</Text>
-                        <View style={styles.mightNeedWrap}>
-                            <View style={styles.mightNeedContent}>
-                                <Text style={styles.mightNeedContentText}>a</Text>
-                            </View>
-                            <View style={styles.mightNeedContent}>
-                                <Text style={styles.mightNeedContentText}>a</Text>
-                            </View>
-                            <View style={styles.mightNeedContent}>
-                                <Text style={styles.mightNeedContentText}>a</Text>
-                            </View>
+                        <View style={styles.contentExra}>
+                            <Feather name="user" size={28} color={colors.green} style={styles.icoExtra} />
+                            <Text style={styles.textExtra}>{feelsLike}º</Text>
                         </View>
                     </View>
+                    <YouMightNeed temp={feelsLike} main={weatherMain} />
                 </View>
             </ScrollView>
         </SafeAreaView>

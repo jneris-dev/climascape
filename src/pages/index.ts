@@ -1,9 +1,11 @@
 import { HomeScreen } from './home'
 import { SearchScreen } from './search'
-import { SettingScreen } from './settings'
+import { AlertScreen } from './alert'
+import { ForecastDays } from './forecastDays'
 
 export {
     HomeScreen,
     SearchScreen,
-    SettingScreen
+    AlertScreen,
+    ForecastDays
 }
