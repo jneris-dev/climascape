@@ -6,8 +6,10 @@ import { Feather } from '@expo/vector-icons';
 import styles from './styles'
 import { getCurrentWeather } from '../../libs/api'
 import colors from '../../libs/colors';
+import { Load } from '../../components/Load';
 
 export const AlertScreen = () => {
+    const [loading, setLoading] = useState(true)
     const [alertEvent, setalertEvent] = useState('')
     const [alertDesc, setalertDesc] = useState('')
     const [alertSenderName, setalertSenderName] = useState('')
@@ -27,24 +29,25 @@ export const AlertScreen = () => {
     }
 
     async function setCurrentWeather() {
+        setLoading(true)
+
         const location = await getLocation()
 
         const data = await getCurrentWeather(location)
 
-        setalertEvent(data[9])
-        setalertDesc(data[10])
-        setalertSenderName(data[11])
-        setalertStart(data[12])
-        setalertEnd(data[13])
+        setalertEvent(data[11])
+        setalertDesc(data[12])
+        setalertSenderName(data[13])
+        setalertStart(data[14])
+        setalertEnd(data[15])
+
+        setLoading(false)
     }
 
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-    var timestampB = alertStart * 1000
-    var timestampE = alertEnd * 1000
-
-    var dateB = new Date(timestampB)
-    var dateE = new Date(timestampE)
+    var dateB = new Date(alertStart * 1000)
+    var dateE = new Date(alertEnd * 1000)
 
     var monthNameB = months[dateB.getMonth()]
     var monthNameE = months[dateE.getMonth()]
@@ -57,23 +60,26 @@ export const AlertScreen = () => {
     }, [])
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.content}>
-                {alertEvent
-                    ?
-                    <View style={styles.alert}>
-                        <Text style={styles.alertTitle}>{alertEvent}</Text>
-                        <Text style={styles.alertDateText}>{beginning} ─ {ending}</Text>
-                        <Text style={styles.alertDesc}>{alertDesc}</Text>
-                        <Text style={styles.alertSenderName}>- {alertSenderName}</Text>
-                    </View>
-                    :
-                    <View style={styles.notAlert}>
-                        <Feather name="alert-triangle" size={80} color={colors.green} />
-                        <Text style={styles.notAlertTitle}>Sem Alertas</Text>
-                    </View>
-                }
-            </View>
-        </SafeAreaView>
+        <>
+            {loading ? <Load /> : null}
+            <SafeAreaView style={styles.container}>
+                <View style={styles.content}>
+                    {alertEvent
+                        ?
+                        <View style={styles.alert}>
+                            <Text style={styles.alertTitle}>{alertEvent}</Text>
+                            <Text style={styles.alertDateText}>{beginning} ─ {ending}</Text>
+                            <Text style={styles.alertDesc}>{alertDesc}</Text>
+                            <Text style={styles.alertSenderName}>- {alertSenderName}</Text>
+                        </View>
+                        :
+                        <View style={styles.notAlert}>
+                            <Feather name="alert-triangle" size={80} color={colors.green} />
+                            <Text style={styles.notAlertTitle}>Sem Alertas</Text>
+                        </View>
+                    }
+                </View>
+            </SafeAreaView>
+        </>
     )
 }

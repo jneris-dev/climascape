@@ -11,7 +11,7 @@ export default StyleSheet.create({
         flex: 1,
         width: '100%',
         alignItems: 'center',
-        padding: 30
+        padding: 30,
     },
     header: {
         width: '100%',
@@ -26,46 +26,54 @@ export default StyleSheet.create({
     },
     headerHour: {
         color: colors.green,
-        fontSize: 18,
+        fontSize: 20,
         fontFamily: fonts.text,
-        marginLeft: 5
+        marginLeft: 5,
+        marginBottom: 5
     },
     wrapWeather: {
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: 50
+        marginVertical: 20
     },
     tempNow: {
         color: colors.white,
-        fontSize: 80,
-        paddingLeft: 15,
+        fontSize: 110,
+        paddingRight: 15,
         fontFamily: fonts.text,
     },
     badge: {
         color: colors.white,
         fontFamily: fonts.text,
-        fontSize: 18,
-        textTransform: 'capitalize',
+        fontSize: 15,
+        textTransform: 'uppercase',
+        letterSpacing: 5,
+        marginBottom: 40
     },
     wrapExtras: {
         width: '100%',
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
-        marginTop: 30,
-        paddingHorizontal: 10,
+        marginBottom: 40
     },
     contentExra: {
-        flexDirection: 'column',
+        flexDirection: 'row',
         alignItems: 'center',
+        flex: 1
     },
     icoExtra: {
-        marginBottom: 13,
+        marginRight: 13,
+    },
+    titleExtra: {
+        color: colors.white,
+        fontSize: 15,
+        fontFamily: fonts.heading
     },
     textExtra: {
-        color: colors.white,
+        color: colors.disabled,
         fontFamily: fonts.text,
         fontSize: 15,
     },

@@ -10,7 +10,6 @@ import { WeatherIcon } from '../../components/WeatherIcon';
 
 import styles from './styles';
 import colors from '../../libs/colors';
-import { YouMightNeed } from '../../components/YouMightNeed';
 
 export type location = {
     latitude: string | number,
@@ -38,6 +37,8 @@ export const HomeScreen = () => {
     const [weatherMainDescription, setweatherMainDescription] = useState('')
     const [weatherIcon, setWeatherIcon] = useState('')
     const [feelsLike, setFeelsLike] = useState<number>()
+    const [clouds, setClouds] = useState()
+    const [visibility, setVisibility] = useState<any>()
 
     async function getLocation() {
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -81,6 +82,8 @@ export const HomeScreen = () => {
         setweatherMainDescription(data[6])
         setWeatherIcon(data[7])
         setFeelsLike(parseInt(data[8]))
+        setClouds(data[9])
+        setVisibility(data[10])
 
         var SunCalc = require('suncalc');
         var times = SunCalc.getTimes(new Date(), resolvedLocation.latitude, resolvedLocation.longitude)
@@ -96,6 +99,8 @@ export const HomeScreen = () => {
         setLoading(false)
     }
 
+    var visibKm = visibility / 1000
+
     async function refreshApp() {
         setRefresh(true)
 
@@ -107,54 +112,82 @@ export const HomeScreen = () => {
     useEffect(() => {
         setCurrentWeather()
     }, [])
-
-    if (loading)
-        return <Load />
-
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refresh}
-                        onRefresh={refreshApp}
-                        progressBackgroundColor={colors.green}
-                    />
-                }
-            >
-                <View style={styles.content}>
-                    <View style={styles.header}>
-                        <Text style={styles.headerDate}>{dateCurrent}</Text>
-                        <Text style={styles.headerHour}>{hours}</Text>
+        <>
+            {loading ? <Load /> : null}
+            <SafeAreaView style={styles.container}>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refresh}
+                            onRefresh={refreshApp}
+                            progressBackgroundColor={colors.green}
+                        />
+                    }
+                >
+                    <View style={styles.content}>
+                        <View style={styles.header}>
+                            <Text style={styles.headerDate}>{dateCurrent}</Text>
+                            <Text style={styles.headerHour}>{hours}</Text>
+                        </View>
+                        <View style={styles.wrapWeather}>
+                            <Text style={styles.tempNow}>{currentTemperature}º</Text>
+                            <WeatherIcon icon={weatherIcon} size={60} />
+                        </View>
+                        <Text style={styles.badge}>{weatherMainDescription}</Text>
+                        <View style={styles.wrapExtras}>
+                            <View style={styles.contentExra}>
+                                <Feather name="user" size={28} color={colors.green} style={styles.icoExtra} />
+                                <View>
+                                    <Text style={styles.titleExtra}>Feels Like</Text>
+                                    <Text style={styles.textExtra}>{feelsLike}º</Text>
+                                </View>
+                            </View>
+                            <View style={styles.contentExra}>
+                                <Feather name="droplet" size={28} color={colors.green} style={styles.icoExtra} />
+                                <View>
+                                    <Text style={styles.titleExtra}>Humidity</Text>
+                                    <Text style={styles.textExtra}>{humidity}%</Text>
+                                </View>
+                            </View>
+                        </View>
+                        <View style={styles.wrapExtras}>
+                            <View style={styles.contentExra}>
+                                <Feather name="cloud" size={28} color={colors.green} style={styles.icoExtra} />
+                                <View>
+                                    <Text style={styles.titleExtra}>Clouds</Text>
+                                    <Text style={styles.textExtra}>{clouds}%</Text>
+                                </View>
+                            </View>
+                            <View style={styles.contentExra}>
+                                <Feather name="wind" size={28} color={colors.green} style={styles.icoExtra} />
+                                <View>
+                                    <Text style={styles.titleExtra}>Wind Speed</Text>
+                                    <Text style={styles.textExtra}>{wind}m/s</Text>
+                                </View>
+                            </View>
+                        </View>
+                        <View style={styles.wrapExtras}>
+                            <View style={styles.contentExra}>
+                                <Feather name="eye" size={28} color={colors.green} style={styles.icoExtra} />
+                                <View>
+                                    <Text style={styles.titleExtra}>Visibility</Text>
+                                    <Text style={styles.textExtra}>{visibKm}km</Text>
+                                </View>
+                            </View>
+                            <View style={styles.contentExra}>
+                                <Feather name="chevrons-down" size={28} color={colors.green} style={styles.icoExtra} />
+                                <View>
+                                    <Text style={styles.titleExtra}>Pressure</Text>
+                                    <Text style={styles.textExtra}>{pressure}hPa</Text>
+                                </View>
+                            </View>
+                        </View>
                     </View>
-                    <View style={styles.wrapWeather}>
-                        <WeatherIcon icon={weatherIcon} size={120} />
-                        <Text style={styles.tempNow}>{currentTemperature}º</Text>
-                    </View>
-                    <Text style={styles.badge}>{weatherMainDescription}</Text>
-                    <View style={styles.wrapExtras}>
-                        <View style={styles.contentExra}>
-                            <Feather name="wind" size={28} color={colors.green} style={styles.icoExtra} />
-                            <Text style={styles.textExtra}>{wind}m/s</Text>
-                        </View>
-                        <View style={styles.contentExra}>
-                            <Feather name="droplet" size={28} color={colors.green} style={styles.icoExtra} />
-                            <Text style={styles.textExtra}>{humidity}%</Text>
-                        </View>
-                        <View style={styles.contentExra}>
-                            <Feather name="chevrons-down" size={28} color={colors.green} style={styles.icoExtra} />
-                            <Text style={styles.textExtra}>{pressure}hPa</Text>
-                        </View>
-                        <View style={styles.contentExra}>
-                            <Feather name="user" size={28} color={colors.green} style={styles.icoExtra} />
-                            <Text style={styles.textExtra}>{feelsLike}º</Text>
-                        </View>
-                    </View>
-                    <YouMightNeed temp={feelsLike} main={weatherMain} />
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+                </ScrollView>
+            </SafeAreaView>
+        </>
     );
 }

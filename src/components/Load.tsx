@@ -28,7 +28,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.white,
+        backgroundColor: colors.background,
+        position: 'absolute',
+        zIndex: 99,
+        height: '100%',
+        opacity: .85
     },
     animation: {
         backgroundColor: 'transparent',

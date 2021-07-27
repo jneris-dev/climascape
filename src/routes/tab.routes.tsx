@@ -30,7 +30,7 @@ const AuthRoutes = () => {
 
         const data = await getCurrentWeather(location)
 
-        setalertEvent(data[9])
+        setalertEvent(data[11])
     }
 
     useEffect(() => {
@@ -45,10 +45,15 @@ const AuthRoutes = () => {
             style: {
                 paddingVertical: Platform.OS === 'ios' ? 20 : 0,
                 height: Platform.OS === 'ios' ? 78 : 60,
-                backgroundColor: colors.background,
+                backgroundColor: colors.background_light,
                 shadowOpacity: 0,
                 elevation: 0,
                 borderTopWidth: 0,
+                borderRadius: 60,
+                position: 'absolute',
+                bottom: 15,
+                left: 10,
+                right: 10
             }
         }}>
             <AppTab.Screen
@@ -64,7 +69,7 @@ const AuthRoutes = () => {
                     ))
                 }}
             />
-            <AppTab.Screen
+            {/* <AppTab.Screen
                 name="ForecastDays"
                 component={ForecastDays}
                 options={{
@@ -76,7 +81,7 @@ const AuthRoutes = () => {
                         />
                     ))
                 }}
-            />
+            /> */}
             <AppTab.Screen
                 name="Search"
                 component={SearchScreen}

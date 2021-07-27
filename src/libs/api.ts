@@ -23,6 +23,8 @@ export async function getCurrentWeather(resolvedLocation: any) {
         const weatherMainDescription = data.current.weather[0].description
         const weatherIcon = data.current.weather[0].icon
         const feelsLike = data.current.feels_like
+        const clouds = data.current.clouds
+        const visibility = data.current.visibility
 
         const alertEvent = data.alerts ? data.alerts[0].event : null
         const alertDesc = data.alerts ? data.alerts[0].description : null
@@ -40,11 +42,14 @@ export async function getCurrentWeather(resolvedLocation: any) {
             weatherMainDescription,
             weatherIcon,
             feelsLike,
+            clouds,
+            visibility,
+
             alertEvent,
             alertDesc,
             alertSenderName,
             alertStart,
-            alertEnd
+            alertEnd,
         ]
 
     }).catch(function (error: any) {
@@ -71,7 +76,6 @@ export async function getCurrentCity(currentCity: any) {
         const tempMin = data.list[0].main.temp_min
         const tempMax = data.list[0].main.temp_max
         const humidity = data.list[0].main.humidity
-        const dt = data.list[0].dt
         const wind = data.list[0].wind.speed
         const country = data.list[0].sys.country
         const rain = data.list[0].rain
@@ -86,7 +90,6 @@ export async function getCurrentCity(currentCity: any) {
             tempMin,
             tempMax,
             humidity,
-            dt,
             wind,
             country,
             rain,
