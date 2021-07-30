@@ -32,6 +32,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": ""
+    "description": "Climascape detects weather forecasts in your current location automatically. There are many information in weather forecasts which includes atmospheric pressure, weather condition, relative humidity, wind speed and Cloudness,\nReal time temperature, humidity, pressure and wind force are all in based OpenWeather.",
+    "githubUrl": "https://github.com/jneris-dev/climascape"
   }
 }
