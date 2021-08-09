@@ -19,7 +19,7 @@
 
 Este projeto foi desenvolvido utilizando as seguintes tecnologias:
 
-![](https://img.shields.io/badge/expo-41.0.1-f1f1f1?style=for-the-badge&logo=expo&labelColor=111111)
+![](https://img.shields.io/badge/expo-~42.0.0-f1f1f1?style=for-the-badge&logo=expo&labelColor=111111)
 ![](https://img.shields.io/badge/react-0.64.0-06bcee?style=for-the-badge&logo=react&labelColor=20232a)
 ![](https://img.shields.io/badge/typescript-4.0.0-3178c6?style=for-the-badge&logo=typescript&labelColor=f1f1f1)
 
